@@ -15,6 +15,9 @@
         html {
             scroll-behavior: smooth;
         }
+        #sectionRooms {
+            scroll-margin-top: 100px;
+        }
         #home {
             background-color: #0a0a0a;
         }
