@@ -1,4 +1,4 @@
-    document.querySelector('form').addEventListener('submit', function(e) {
+document.querySelector("#sectionBooking form").addEventListener("submit", function(e) {
         e.preventDefault();
 
         const checkIn = document.getElementById('CHECK-IN').value;
