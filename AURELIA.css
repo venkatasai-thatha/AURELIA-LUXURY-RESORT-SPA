@@ -626,16 +626,7 @@
                 ::-webkit-scrollbar-thumb:hover{
                     background:#e0c36c;
                 }
-                .reveal{
-                    opacity:0;
-                    transform:translateY(50px);
-                    transition:1s ease;
-                }
-
-                .reveal.active{
-                    opacity:1;
-                    transform:translateY(0);
-                }
+        
                 footer a{
                     transition:0.3s ease;
                 }
