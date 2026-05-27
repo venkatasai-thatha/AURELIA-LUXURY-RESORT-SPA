@@ -42,4 +42,15 @@
         const whatsappNumber = '918340096039';
         window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
     });
-    
+    <script>
+function sendWhatsApp() {
+    let name = document.getElementById("name").value;
+    let room = document.getElementById("ROOMTYPE").value;
+
+    let message = `Hi, I want to book a room.%0AName: ${name}%0ARoom: ${room}`;
+
+    let url = `https://wa.me/918340096039?text=${message}`;
+
+    window.open(url, "_blank");
+}
+</script>
