@@ -1,3 +1,4 @@
+
                 body{
             margin-top: 70px;
             animation:pageFade 1s ease;
@@ -646,3 +647,4 @@
             .booking-error.show {
                 display:block;
             }
+    
