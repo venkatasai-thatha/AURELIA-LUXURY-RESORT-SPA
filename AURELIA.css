@@ -1,4 +1,4 @@
-        body{
+                body{
             margin-top: 70px;
             animation:pageFade 1s ease;
         }
@@ -631,3 +631,18 @@
                     color:#c9a84c !important;
                     transform:translateX(5px);
                 }
+
+            .booking-error {
+                display:none;
+                color:#ffb4b4;
+                background:rgba(255,0,0,0.08);
+                border:1px solid rgba(255,120,120,0.25);
+                padding:10px 12px;
+                border-radius:8px;
+                margin-top:12px;
+                font-size:14px;
+                text-align:left;
+            }
+            .booking-error.show {
+                display:block;
+            }
