@@ -1,45 +1,88 @@
-   document.querySelector("#sectionBooking form").addEventListener("submit", function(e)  {
-        e.preventDefault();
 
-        const checkIn = document.getElementById('CHECK-IN').value;
-        const checkOut = document.getElementById('CHECK-OUT').value;
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const phone = document.getElementById('phone').value;
-        const guests = document.getElementById('guests').value;
-        const roomType = document.getElementById('ROOMTYPE').value;
-        const requests = document.getElementById('requests').value;
+        document.addEventListener('DOMContentLoaded', function () {
+            const bookingForm = document.getElementById('bookingForm');
+            const errorBox = document.getElementById('bookingError');
+            const whatsappNumber = '918340096039';
 
-        const formatDate = (d) => {
-            if (!d) return 'Not specified';
-            const date = new Date(d);
-            return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-        };
+            function showError(message) {
+                if (errorBox) {
+                    errorBox.textContent = message;
+                    errorBox.classList.add('show');
+                }
+            }
 
-        // Unique booking number generate
-        const bookingNumber = 'AUR-' + Date.now().toString().slice(-6);
+            function clearError() {
+                if (errorBox) {
+                    errorBox.textContent = '';
+                    errorBox.classList.remove('show');
+                }
+            }
 
-        const message = 
-    `🏨 *AURELIA Resort — Booking Request*
-    🔖 *Booking ID: ${bookingNumber}*
+            function getValue(id) {
+                const element = document.getElementById(id);
+                return element ? element.value.trim() : '';
+            }
 
-    👤 *Guest Details*
-    - Name: ${name}
-    - Email: ${email}
-    - Phone: ${phone}
+            function formatDate(dateValue) {
+                if (!dateValue) return 'Not specified';
+                const parts = dateValue.split('-');
+                if (parts.length !== 3) return dateValue;
+                return `${parts[2]}-${parts[1]}-${parts[0]}`;
+            }
 
-    📅 *Stay Details*
-    - Check-In: ${formatDate(checkIn)}
-    - Check-Out: ${formatDate(checkOut)}
-    - Guests: ${guests}
-    - Room Type: ${roomType}
+            function buildWhatsAppMessage() {
+                const checkIn = getValue('CHECK-IN');
+                const checkOut = getValue('CHECK-OUT');
+                const name = getValue('name');
+                const email = getValue('email');
+                const phone = getValue('phone');
+                const guests = getValue('guests');
+                const roomType = getValue('ROOMTYPE');
+                const requests = getValue('requests');
 
-    ${requests ? `📝 *Special Requests*\n${requests}` : ''}
+                if (!checkIn || !checkOut || !name || !email || !phone || !guests || !roomType) {
+                    return { error: 'Please fill all required booking details before opening WhatsApp.' };
+                }
 
-    _Sent from AURELIA website_`;
+                if (new Date(checkOut) <= new Date(checkIn)) {
+                    return { error: 'Check-out date must be after check-in date.' };
+                }
 
-        const encodedMessage = encodeURIComponent(message);
-        const whatsappNumber = '918340096039';
-        window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, '_blank');
-    });
-    
+                const bookingNumber = 'AUR-' + Date.now().toString().slice(-6);
+
+                const message = `🏨 *AURELIA Resort & Spa - Booking Request*
+
+🔖 *Booking ID:* ${bookingNumber}
+
+👤 *Guest Details*
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+
+📅 *Stay Details*
+Check-In: ${formatDate(checkIn)}
+Check-Out: ${formatDate(checkOut)}
+Guests: ${guests}
+Room Type: ${roomType}
+
+${requests ? `📝 *Special Requests*\n${requests}\n\n` : ''}_Sent from AURELIA website_`;
+
+                return { url: `https://api.whatsapp.com/send?phone=${whatsappNumber}&text=${encodeURIComponent(message)}` };
+            }
+
+            if (bookingForm) {
+                bookingForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    clearError();
+
+                    const result = buildWhatsAppMessage();
+                    if (result.error) {
+                        showError(result.error);
+                        return;
+                    }
+
+                    // Same-tab redirect is the most reliable option on GitHub Pages and mobile browsers.
+                    window.location.href = result.url;
+                });
+            }
+        });
